@@ -271,7 +271,12 @@ function resolveNested(schema, def) {
                         || "anyOf" in schema.properties[prop]
                         || "oneOf" in schema.properties[prop]
                     ) {
-                        keyval.push('"' + prop + '":' + resolveNested(schema.properties[prop], def));
+                        if (schema.properties[prop] === schema) {
+                          // Avoid circular dependencies
+                          keyval.push('"' + prop + '":' + '[Circular]');
+                        } else {
+                          keyval.push('"' + prop + '":' + resolveNested(schema.properties[prop], def));
+                        }
                     }
                     else {
                         comment = schema.properties[prop].description ? "/*" + escapeComment(schema.properties[prop].description) + "*/" : "";
