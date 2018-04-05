@@ -1,5 +1,81 @@
 # Change Log
 
+### version 0.1.144 [Jan 4, 2018]
+- Update dependencies
+
+### version 0.1.143 [Dec 25, 2017]
+- fix file upload placeholder contains p tag
+
+### version 0.1.142 [YANKED]
+### version 0.1.141 [YANKED]
+### version 0.1.140 [YANKED] 
+### version 0.1.139 [Dec 25, 2017]
+ - add border to request/response panel
+
+### version 0.1.138 [Dec 3, 2017]
+ - Update dependencies
+ 
+### version 0.1.136 [Dec 1, 2017]
+ - Fix data alignment
+
+### version 0.1.135 [Nov 30, 2017]
+ - Fix generating error html when data contain $
+
+### version 0.1.134 [Oct 10, 2017]
+ - Add package-lock.json to play nice with npm 5
+
+### version 0.1.131 [Oct 9, 2017]
+ - Default radio button color from blue to grey
+
+### version 0.1.131 [Oct 9, 2017]
+ - Fix default to "Try this operation"
+
+### version 0.1.130 [Oct 9, 2017]
+ - Fix conf.mode undefined
+
+### version 0.1.129 [Oct 9, 2017]
+ - Fix Offline mode overwrite result file with undefined
+
+### version 0.1.128 [Oct 9, 2017]
+ - Fix Offline mode never calls callback
+
+Add missing callback call in offline mode
+ ### version 0.1.126 [Sep 16, 2017]
+ - Fix Offline mode missing Path
+### version 0.1.125 [Sep 16, 2017]
+ - Add User-Agent header
+
+### version 0.1.124 [Aug 9, 2017]
+ - Improve download filename
+ - Always show response body
+
+### version 0.1.123 [yank]
+### version 0.1.122 [yank]
+
+### version 0.1.121 [Aug 9, 2017]
+ - Update livedoc to embeded all resources
+
+### version 0.1.120 [Aug 7, 2017]
+ - Move require('fs') down the line to help browser based app
+
+### version 0.1.120 [Jul 30, 2017]
+ - Make IE less complain about missing tag
+
+### version 0.1.119 [Jul 29, 2017]
+ - Trim trailing backslash of base path
+
+### version 0.1.118 [Jul 29, 2017]
+ - Add JSON previewer
+
+### version 0.1.114 [Jul 28, 2017]
+ - Add Preview and Download Response
+
+### version 0.1.113 [Jul 23, 2017]
+ - Support parameter type `file`
+
+### version 0.1.112 [Jul 11, 2017]
+ - Add esprima as a direct dependency
+
 ### version 0.1.111 [Jun 11, 2017]
  - json response example can now be object and string
 

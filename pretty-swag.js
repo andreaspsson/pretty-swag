@@ -1,8 +1,7 @@
-var fs = require('fs');
 var esprima = require('esprima');
 var livedoc = require('livedoc');
 var marked = require('marked');
-var pluralize = require('pluralize')
+var pluralize = require('pluralize');
 
 var indent_num = 3;
 
@@ -417,7 +416,7 @@ function parse(src, dst, config, callback) {
                 }
             }
             result.host = input.host || "";
-            result.basePath = input.basePath || "";
+            result.basePath = (input.basePath || "").replace(/\/$/, "");
             result.appConfig.showNav = !config.noNav;
             if (config.theme) {
                 if (config.theme === "default") {
@@ -489,7 +488,12 @@ function parse(src, dst, config, callback) {
                     method.name = method_name.toUpperCase();
                     method.tags = input_method.tags || [];
                     method.showMe = !config.collapse.method;
-                    method.showTool = !config.collapse.tool;
+                    if(config.collapse.tool){
+                        method.showTool = !config.collapse.tool;
+                    }
+                    else{
+                        method.showTool = false;
+                    }
                     if (config.autoTags == undefined) {
                         config.autoTags = true;
                     }
@@ -547,6 +551,7 @@ function parse(src, dst, config, callback) {
                             param.desc = parameter.description ? (config.markdown ? marked(parameter.description) : parameter.description) : "";
                             param.required = parameter.required;
                             param.value = parameter.default || "";
+                            param.type = parameter.type || "text";
                             if (parameter.schema) {
                                 param.schema = computeSchema(parameter.schema, input.definitions);
                             }
@@ -644,16 +649,18 @@ function parse(src, dst, config, callback) {
 
             livedoc.generateHTML(JSON.stringify(result, null, indent_num), conf, function (err, data) {
                 if (dst === null) {
-                    callback(err, data);
-                    return;
-                } else {
-                    fs.writeFile(dst, data, 'utf8', function (err) {
+                    return callback(err, data);
+                }
+                else if(conf.mode === "offline"){
+                    return callback(err);
+                }
+                else {
+                    const fs = require('fs');
+                    return fs.writeFile(dst, data, 'utf8', function (err) {
                         if (err) {
-                            callback(err);
-                            return;
+                            return callback(err);
                         }
-                        callback(null);
-                        return;
+                        return callback(null);
                     });
                 }
             });
