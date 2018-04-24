@@ -195,7 +195,12 @@ function unEscapeComment(str) {
     return str.replace(/END-COMMENT-TOKEN/g, "*/");
 }
 
-function resolveNested(schema, def) {
+function resolveNested(schema, def, depth = []) {
+    const isCircular = !!depth.find(d => d === schema);
+    if (isCircular) {
+      return JSON.stringify(schema, null, indent_num);
+    }
+
     var comment = "";
     try {
         var composition_type;
@@ -227,7 +232,7 @@ function resolveNested(schema, def) {
             var arr = schema[composition_type] || [];
 
             for (var i = 0; i < arr.length; i++) {
-                objs.push(resolveNested(arr[i], def));
+                objs.push(resolveNested(arr[i], def, [...depth, schema]));
             }
 
             if ("properties" in schema) {
@@ -235,7 +240,7 @@ function resolveNested(schema, def) {
                 // clone without the composition part
                 var tmp = JSON.parse(JSON.stringify(schema))
                 delete tmp[composition_type];
-                objs.push(resolveNested(tmp));
+                objs.push(resolveNested(tmp, def, [...depth, schema]));
             }
 
             if (objs.length == 1) {
@@ -250,11 +255,11 @@ function resolveNested(schema, def) {
                 comment = schema.description ? "/*" + escapeComment(schema.description) + "*/" : "";
                 if (Array.isArray(schema.items)) {
                     for (var item in schema.items) {
-                        resolvedItems.push(resolveNested(schema.items[item], def));
+                        resolvedItems.push(resolveNested(schema.items[item], def, [...depth, schema]));
                     }
                 }
                 else {
-                    resolvedItems.push(resolveNested(schema.items, def));
+                    resolvedItems.push(resolveNested(schema.items, def, [...depth, schema]));
                 }
 
                 return "[" + comment + resolvedItems.join(",") + "]";
@@ -274,7 +279,7 @@ function resolveNested(schema, def) {
                           // Avoid circular dependencies
                           keyval.push('"' + prop + '":' + '[Circular]');
                         } else {
-                          keyval.push('"' + prop + '":' + resolveNested(schema.properties[prop], def));
+                          keyval.push('"' + prop + '":' + resolveNested(schema.properties[prop], def, [...depth, schema]));
                         }
                     }
                     else {
